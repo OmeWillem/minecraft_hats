@@ -13,7 +13,7 @@ Be sure to follow the license though ;).
 The plugin features a framework to add head-tracked entities to a player.
 These entities (the `Hat` interface), or group of entities, really,
 are static by default.
-They just follow the position of the player, and it's head movements.
+They just follow the position of the player, and its head movements.
 
 A hat is made of a set of hat components (`HatComponent`).
 Normal hat components are static by default,
