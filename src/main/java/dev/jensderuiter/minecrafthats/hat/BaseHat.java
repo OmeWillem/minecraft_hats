@@ -41,7 +41,9 @@ public abstract class BaseHat implements Hat {
     @Override
     public void destroy() {
         this.components.forEach(HatComponent::destroy);
-        this.runnable.cancel();
+        try {
+            this.runnable.cancel();
+        } catch (IllegalStateException ignored) {} // the runnable wasn't scheduled yet, not a problem
     }
 
     @Override
@@ -49,7 +51,8 @@ public abstract class BaseHat implements Hat {
         this.components.forEach(component -> component.tick(location.getYaw(), location.getPitch()));
     }
 
-    protected ItemDisplay initDisplay(Material item, Vector3f scale, AxisAngle4d rotation) {
+    protected ItemDisplay initDisplay(
+            Material item, Vector3f scale, AxisAngle4d rotation, AxisAngle4d rightLocation) {
         ItemDisplay display = (ItemDisplay) player.getWorld().spawnEntity(
                 player.getLocation(), EntityType.ITEM_DISPLAY);
         display.setItemStack(new ItemStack(item));
@@ -57,23 +60,39 @@ public abstract class BaseHat implements Hat {
         Transformation displayTransformation = display.getTransformation();
         displayTransformation.getScale().set(scale);
         displayTransformation.getLeftRotation().set(rotation);
+        displayTransformation.getRightRotation().set(rightLocation);
         display.setTransformation(displayTransformation);
         return display;
     }
 
-    protected HatComponent addComponent(Material item, Vector offset, Vector3f scale, AxisAngle4d rotation) {
-        ItemDisplay display = this.initDisplay(item, scale, rotation);
+    protected ItemDisplay initDisplay(Material item, Vector3f scale, AxisAngle4d rotation) {
+        return this.initDisplay(item, scale, rotation, new AxisAngle4d(0, 1, 1, 1));
+    }
+
+    protected HatComponent addComponent(
+            Material item, Vector offset, Vector3f scale, AxisAngle4d rotation, AxisAngle4d rightLocation) {
+        ItemDisplay display = this.initDisplay(item, scale, rotation, rightLocation);
         HatComponent component = new HatComponent(display, this.getPlayer(), offset);
 
         this.components.add(component);
         return component;
     }
 
+    protected HatComponent addComponent(
+            Material item, Vector offset, Vector3f scale, AxisAngle4d rotation) {
+        return this.addComponent(item, offset, scale, rotation, new AxisAngle4d(0, 1, 1, 1));
+    }
+
+    protected HatComponent addComponent(
+            Material item, Vector offset, float scale, AxisAngle4d rotation, AxisAngle4d rightLocation) {
+        return this.addComponent(item, offset, new Vector3f(scale, scale, scale), rotation, rightLocation);
+    }
+
     protected HatComponent addComponent(Material item, Vector offset, float scale, AxisAngle4d rotation) {
-        return this.addComponent(item, offset, new Vector3f(scale, scale, scale), rotation);
+        return this.addComponent(item, offset, new Vector3f(scale, scale, scale), rotation, new AxisAngle4d(0, 1, 1, 1));
     }
 
     protected HatComponent addComponent(Material item, Vector offset, float scale) {
-        return this.addComponent(item, offset, new Vector3f(scale, scale, scale), new AxisAngle4d(0, 1, 1, 1));
+        return this.addComponent(item, offset, new Vector3f(scale, scale, scale), new AxisAngle4d(0, 1, 1, 1), new AxisAngle4d(0, 1, 1, 1));
     }
 }

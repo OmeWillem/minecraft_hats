@@ -2,7 +2,6 @@ package dev.jensderuiter.minecrafthats.hat.type;
 
 import dev.jensderuiter.minecrafthats.HatsPlugin;
 import dev.jensderuiter.minecrafthats.hat.BaseHat;
-import dev.jensderuiter.minecrafthats.hat.HatComponent;
 import dev.jensderuiter.minecrafthats.hat.component.PropellerComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,10 +18,6 @@ public class PropellerHat extends BaseHat {
 
     public PropellerHat(Player player) {
         super(player);
-
-//        this.addComponent(Material.PAPER, new Vector(0.5, 0,0), 1);
-//        this.addComponent(Material.REDSTONE_TORCH, new Vector(0, 1, 0.2), 1);
-//        this.addComponent(Material.BEEF, new Vector(0, 1.5, 0), 2);
 
         // front piece
         this.addComponent(
