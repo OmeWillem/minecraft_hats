@@ -25,7 +25,7 @@ public class SpawnCommand implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (args.length < 1) {
-            player.sendMessage(hatTypes.keySet().stream().reduce("Possible choices: ", (s, n) -> s + ", " + n));
+            player.sendMessage("Possible choices: " + String.join(", ", hatTypes.keySet()));
             return true;
         }
 
