@@ -47,7 +47,13 @@ public class SpawnCommand implements CommandExecutor {
             return true;
         }
 
-        Hat hat = hatType.getConstructor(Player.class).newInstance(player);
+        Hat hat = HatsPlugin.playerHats.get(player);
+        if (hat != null) {
+            player.sendMessage("You already have a hat on!");
+            return true;
+        }
+
+        hat = hatType.getConstructor(Player.class).newInstance(player);
         HatsPlugin.playerHats.put(player, hat);
         player.sendMessage("Spawned the hat :)");
 
