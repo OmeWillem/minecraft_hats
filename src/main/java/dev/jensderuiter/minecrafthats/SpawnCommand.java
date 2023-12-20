@@ -20,35 +20,36 @@ public class SpawnCommand implements CommandExecutor {
 
     @SneakyThrows
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(CommandSender commandSender, Command command, String strings, String[] args) {
         if (!(commandSender instanceof Player)) return true;
         Player player = (Player) commandSender;
 
         if (args.length < 1) {
-            player.sendMessage("Je moet wel iets meegeven he");
+            player.sendMessage(hatTypes.keySet().stream().reduce("Possible choices: ", (s, n) -> s + ", " + n));
             return true;
         }
 
         if (args[0].equals("remove")) {
             Hat hat = HatsPlugin.playerHats.get(player);
             if (hat == null) {
-                player.sendMessage("Je had helemaal geen hoed");
+                player.sendMessage("You don't have a hat");
             } else {
                 hat.destroy();
                 HatsPlugin.playerHats.remove(player);
-                player.sendMessage("Hoed is weg");
+                player.sendMessage("Hat.. is gone");
             }
             return true;
         }
 
         Class<? extends Hat> hatType = hatTypes.get(args[0]);
         if (hatType == null) {
-            player.sendMessage("Deze hoed bestaat niet makker");
+            player.sendMessage("This hat doesn't exist");
             return true;
         }
 
         Hat hat = hatType.getConstructor(Player.class).newInstance(player);
         HatsPlugin.playerHats.put(player, hat);
+        player.sendMessage("Spawned the hat :)");
 
         return true;
     }
