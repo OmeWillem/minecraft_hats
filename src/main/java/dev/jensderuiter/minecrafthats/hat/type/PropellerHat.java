@@ -104,6 +104,7 @@ public class PropellerHat extends BaseHat {
                             0,
                             false, false, false
                     ));
+                    this.cancel();
                 }
 
             }
